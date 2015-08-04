@@ -9,7 +9,7 @@
 #    Copyright (C) 2003,2005,2006 Jörg Sommer <joerg@alea.gnuu.de>
 #    Copyright (C) 2008 Martin Kompf (skaringa at users.sourceforge.net)
 #    Copyright (C) 2014, Erik Colson <ecocode@cpan.org>
-#    Copyright (C) 2014, Hajo Hindriks <hajo at hindriks.ch>
+#    Copyright (C) 2015, Hajo Hindriks <dev at hindriks.ch>
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -51,8 +51,8 @@ my $url1 = 'http://www.morningstar.ch/ch/funds/SecuritySearchResults.aspx?search
 my $urlDetails = 'http://www.morningstar.ch/ch/funds/snapshot/snapshot.aspx?id=';
 
 # LOGGING - set to 1 to enable log file
-my $logging = 1;
-my $logfile = '>>./PostFinance.log';
+my $logging = 0;
+my $logfile = '>>./MorningstarCH.log';
 
 sub methods { return ( morningstarch => \&morningstarch ); }
 
@@ -61,35 +61,10 @@ sub labels {
 }
 
 # =======================================================================
-# The vwd routine gets quotes of funds from the website of
-# vwd Vereinigte Wirtschaftsdienste GmbH.
+# The morningstarch routine gets quotes of funds from the website of
+# Morningstar Schweiz.
 #
-# This subroutine was written by Volker Stuerzl <volker.stuerzl@gmx.de>
-# and adjusted to match the new vwd interface by Jörg Sommer
-
-# Trim leading and tailing whitespaces (also non-breakable whitespaces)
-sub trim {
-    $_ = shift();
-    s/^\s*//;
-    s/\s*$//;
-    s/&nbsp;//g;
-    return $_;
-}
-
-# Trim leading and tailing whitespaces, leading + and tailing %, leading
-# and tailing &plusmn; (plus minus) and translate german separators into
-# english separators. Also removes the thousands separator in returned
-# values.
-sub trimtr {
-    $_ = shift();
-    s/&nbsp;//g;
-    s/&plusmn;//g;
-    s/^\s*\+?//;
-    s/\%?\s*$//;
-    tr/,./.,/;
-    s/,//g;
-    return $_;
-}
+# This subroutine was written by Hajo Hindriks <dev@hindriks.ch>
 
 sub morningstarch {
     my $quoter = shift;
@@ -124,6 +99,8 @@ sub morningstarch {
             $info{ $fund, "symbol" } = "686923";
         } 
      
+		next if not $id;
+		
         my $request = $urlDetails
             . $id;
             
@@ -223,7 +200,7 @@ sub morningstarch {
             if ( $response->code == 503 && $max_retry-- > 0 ) {
 
                 # The server limits the number of request per time and client
-                sleep 5;
+                sleep 1;
                 redo;
             }
         }
@@ -247,15 +224,14 @@ Finance::Quote::MorningstarCH  - Obtain quotes from morningstar.ch.
 
     $q = Finance::Quote->new;
 
-    %stockinfo = $q->fetch("morningstar","868921");
+    %stockinfo = $q->fetch("morningstarch","868921");
 
 =head1 DESCRIPTION
 
-This module obtains information from vwd Vereinigte Wirtschaftsdienste GmbH
-http://www.vwd.de/. Many european stocks and funds are available, but
-at the moment only funds are supported.
+This module obtains information from Morningstar Schweiz
+http://www.morningstar.ch. 
 
-Information returned by this module is governed by vwd's terms
+Information returned by this module is governed by morningstar's terms
 and conditions.
 
 =head1 LABELS RETURNED

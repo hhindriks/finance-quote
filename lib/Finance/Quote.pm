@@ -173,15 +173,21 @@ sub new {
   if (!@reqmodules or $reqmodules[0] eq "-defaults") {
     shift(@reqmodules) if (@reqmodules);
     # Default modules
-    @modules = qw/AEX AIAHK ASEGR ASX BMONesbittBurns BSERO Bourso
-            Cdnfundlibrary Citywire CSE Currencies Deka DWS FTPortfolios Fidelity FidelityFixed
-            FinanceCanada Fool FTfunds HU GoldMoney HEX IndiaMutual LeRevenu
-            ManInvestments Morningstar MorningstarCH MorningstarJP MStaruk MtGox NZX Platinum
-            SEB SIXfunds SIXshares StockHouseCanada TSP TSX Tdefunds
-            Tdwaterhouse Tiaacref TNetuk Troweprice Trustnet Union USFedBonds
-            VWD ZA Cominvest Finanzpartner YahooJSON Yahoo::Asia
+    # @modules = qw/AEX AIAHK ASEGR ASX BMONesbittBurns BSERO Bourso
+    #         Cdnfundlibrary Citywire CSE Currencies Deka DWS FTPortfolios Fidelity FidelityFixed
+    #         FinanceCanada Fool FTfunds HU GoldMoney HEX IndiaMutual LeRevenu
+    #         ManInvestments Morningstar MorningstarCH MorningstarJP MStaruk MtGox NZX Platinum
+    #         SEB SIXfunds SIXshares StockHouseCanada TSP TSX Tdefunds
+    #         Tdwaterhouse Tiaacref TNetuk Troweprice Trustnet Union USFedBonds
+    #         VWD ZA Cominvest Finanzpartner YahooJSON Yahoo::Asia
+    #         Yahoo::Australia Yahoo::Brasil Yahoo::Europe Yahoo::NZ
+    #         Yahoo::USA YahooYQL ZA_UnitTrusts/; }
+	
+	# only use modules that are needed for my tests
+    @modules = qw/Currencies YahooJSON Yahoo::Asia
             Yahoo::Australia Yahoo::Brasil Yahoo::Europe Yahoo::NZ
-            Yahoo::USA YahooYQL ZA_UnitTrusts/; }
+            Yahoo::USA YahooYQL
+			MorningstarCH /; }	
 
   $this->_load_modules(@modules,@reqmodules);
 
