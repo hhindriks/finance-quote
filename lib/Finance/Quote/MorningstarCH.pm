@@ -98,6 +98,18 @@ sub morningstarch {
             $id = "F0GBR04PIJ";
             $info{ $fund, "symbol" } = "686923";
         } 
+		
+        # ZKB Einkommen
+        if (($fund eq "237926") || ($fund eq "000237926") || ($fund eq "CH0002379268")) {
+            $id = "F0GBR04JH8";
+            $info{ $fund, "symbol" } = "237926";
+        } 	
+
+        # ZKB Ausgewogen
+        if (($fund eq "237927") || ($fund eq "000237927") || ($fund eq "CH0002379276")) {
+            $id = "F0GBR04JH6";
+            $info{ $fund, "symbol" } = "237927";
+        } 			
      
 		next if not $id;
 		
